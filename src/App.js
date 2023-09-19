@@ -1,11 +1,14 @@
 import React from 'react';
 import Header from './components/Header';
-// import Lists from './components/Lists';
+import Lists from './components/Lists';
 
 
 function App() {
   return (
-   <Header />
+    <div>
+      <Header />
+      <Lists />
+    </div>
 
   );
 }

@@ -38,3 +38,11 @@
     transform: rotate(360deg);
   }
 }
+
+/* add styles */
+
+.card-container{
+  border-radius: 10px;
+  background-color: #61dafb;
+}
+
