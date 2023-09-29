@@ -1,113 +1,91 @@
-import React from "react";
-import "../App.css";
+import React, { useState } from "react";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Stack from 'react-bootstrap/Stack';
+import Filter from "./Filter";
 
 
 
 
 
 const Lists = () => {
+
+  const [jobs, setJobs] = useState([]);
+
+  const getData = () => {
+
+    fetch('http://localhost:3030/jobs?_limit=5'
+      , {
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
+      }
+    )
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (jobJson) {
+        // console.log(jobJson);
+        setJobs(jobJson)
+      });
+  }
+
+  getData()
+
   return (
     <div>
-      {/* <div className="card-container">
-        <div className="card">
-          <div className="title">
-            <div>
-              <span>Photoshop</span>
-              <span>New</span>
-              <span>Featured</span>
-            </div>
-            <h2>Senior Frontend Developer</h2>
-            <div>
-              <span>1d ago</span>
-              <span>Full Time</span>
-              <span>USA Only</span>
-            </div>
-          </div>
-          <div className="skills">
-              <span>Frontend</span>
-              <span>Senior</span>
-              <span>HTML</span>
-              <span>CSS</span>
-              <span>Javascript</span>
-          </div>
-        </div>
-
-      </div> */}
-
+     
       <Container>
         <Stack gap={4}>
-          <Row className="justify-content-center">
-            <Col xs="10" lg="10" className="bg-warning">
-              <div className="card-container">
-                <Row className="align-items-center">
 
-                  <Col className="mt-3" lg="6">
-                    <div>
-                      <span className="me-4">Photoshop</span>
-                      <span className="me-2">New</span>
-                      <span className="me-2">Featured</span>
-                    </div>
-                    <h6 className="my-1" >Senior Frontend Developer</h6>
-                    <div>
-                      <span className="me-2">1d ago</span>
-                      <span className="me-2">&#8226;</span>
-                      <span className="me-2">Full Time</span>
-                      <span className="me-2">&#8226;</span>
-                      <span className="me-2">USA Only</span>
-                    </div>
-                  </Col>
+        <Filter />
 
-                  <Col className="mt-3" lg="6">
+          {jobs.map((job, index) => (
 
-                    <span className="d-inline-block me-3">Frontend</span>
-                    <span className="d-inline-block me-3">Senior</span>
-                    <span className="d-inline-block me-3">HTML</span>
-                    <span className="d-inline-block me-3">CSS</span>
-                    <span className="d-inline-block">Javascript</span>
-                  </Col>
+            <Row className="justify-content-center" key={index} 
+                  data-role={job.role} data-level={job.level} 
+                      data-languages={job.languages} data-tools={job.tools}>
+              <Col xs="10" lg="10" className="bg-warning">
+                <div className="card-container">
+                  <Row className="align-items-center">
 
-                </Row>
+                    <Col className="mt-3" lg="6">
+                      <div>
+                        <span className="me-4">{job.company}</span>
+                        <span className="me-2">{job.new}</span>
+                        <span className="me-2">{job.featured}</span>
+                      </div>
+                      <h6 className="my-1" >{job.position}</h6>
+                      <div>
+                        <span className="me-2">{job.postedAt}</span>
+                        <span className="me-2">&#8226;</span>
+                        <span className="me-2">{job.contract}</span>
+                        <span className="me-2">&#8226;</span>
+                        <span className="me-2">{job.location}</span>
+                      </div>
+                    </Col>
 
-              </div>
-            </Col>
-          </Row>
+                    <Col className="mt-3" lg="6">
+                      <span className="d-inline-block me-3">{job.role}</span>
+                      <span className="d-inline-block me-3">{job.level}</span>
+                      {job.languages.map((language, index) => {
+                        return <span className="d-inline-block me-3" key={index}>{language}</span>
+                      })}
 
-          <Row className="justify-content-center">
-            <Col xs="10" lg="10" className="bg-warning">
-              <div className="card-container">
-                <Row className="align-items-center">
-                  <Col className="mt-3" lg="6">
-                    <div>
-                      <span className="me-4">Photoshop</span>
-                      <span className="me-2">New</span>
-                      <span className="me-2">Featured</span>
-                    </div>
-                    <h6 className="my-1" >Senior Frontend Developer</h6>
-                    <div>
-                      <span className="me-2">1d ago</span>
-                      <span className="me-2">&#8226;</span>
-                      <span className="me-2">Full Time</span>
-                      <span className="me-2">&#8226;</span>
-                      <span className="me-2">USA Only</span>
-                    </div>
-                  </Col>
-                  <Col className="mt-3" lg="6">
+                       {job.tools.map((tool, index) => {
+                        return <span className="d-inline-block me-3" key={index}>{tool}</span>
+                      })}
+                    </Col>
 
-                    <span className="d-inline-block me-3">Frontend</span>
-                    <span className="d-inline-block me-3">Senior</span>
-                    <span className="d-inline-block me-3">HTML</span>
-                    <span className="d-inline-block me-3">CSS</span>
-                    <span className="d-inline-block">Javascript</span>
-                  </Col>
-                </Row>
+                  </Row>
 
-              </div>
-            </Col>
-          </Row>
+                </div>
+              </Col>
+            </Row>
+          ))}
+
         </Stack>
       </Container>
 
