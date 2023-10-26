@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -7,29 +7,6 @@ import Filter from "./Filter";
 
 const Lists = () => {
   const [jobs, setJobs] = useState([]);
-
-  const getData = async () => {
-    await fetch("http://localhost:3001/jobs?_limit=5", {
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        Accept: "application/json",
-      },
-    })
-      .then(function (response) {
-        return response.json();
-      })
-      .then(function (jobJson) {
-        // console.log(jobJson);
-        setJobs(jobJson);
-      });
-  };
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      getData();
-    }, 1000);
-    return () => clearInterval(interval);
-  });
 
   return (
     <div>

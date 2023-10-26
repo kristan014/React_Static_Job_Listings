@@ -1,5 +1,5 @@
 import React from "react";
-import header_image from "../images/bg-header-desktop.svg";
+// import header_image from "../images/bg-header-desktop.svg";
 import "../App.css";
 
 
