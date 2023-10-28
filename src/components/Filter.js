@@ -5,50 +5,72 @@ import api from "../api/api";
 
 function Filter(props) {
 
-  const [isFiltered, setIsFiltered] = useState(false);
-  const [urlParams, setUrlParams] = useState({
-    role:[],
-    level:[],
-    language:[],
-    tool:[],
-  });
- 
 
-  isFiltered && api.getData(props.setJobs)
+
+  const [isFiltered, setIsFiltered] = useState(false);
+  const [urlParams, setUrlParams] = useState('');
+
+  const [roleParams, setRoleParams] = useState([]);
+  const [levelParams, setLevelParams] = useState([]);
+  const [languageParams, setLanguageParams] = useState([]);
+  const [toolParams, setToolParams] = useState([]);
+
+
+  isFiltered ? api.getData(props.setJobs) : api.getData(props.setJobs)
 
 
 
   const searchItems = async (e) => {
-    console.log(e.target.selectedOptions)
+    // console.log(e.target.selectedOptions)
     // let filterValue;
+
+    setRoleParams([])
+    setLevelParams([])
+    setLanguageParams([])
+    setToolParams([])
+
+
+
     Array.from(e.target.selectedOptions, option => {
+      let attr = option.getAttribute('attr')
 
-      console.log(option.getAttribute('attr'))
-      console.log(option.value)
+      let string = ''
 
-      
+      switch (attr) {
+        case 'role':
+          setRoleParams(roleParams => [...roleParams, option.value])
+          setIsFiltered(true)
+          break;
+
+        case 'level':
+          setLevelParams(levelParams => [...levelParams, option.value])
+          setIsFiltered(true)
+          break;
+
+        case 'language':
+          setLanguageParams(languageParams => [...languageParams, option.value])
+          setIsFiltered(true)
+          break;
+
+        case 'tool':
+          setToolParams(toolParams => [...toolParams, option.value])
+          setIsFiltered(true)
+          break;
+          
+          default:
+          setIsFiltered(false)
+          break;
+      }
+
+          
     });
 
-    // optionValues.map((option) => { 
-    //   // filterValue += `&role_like=${filterValue}`
-    //   console.log(option)
-    // })
+    Array.from(roleParams, role =>{
+      console.log(role)
+    })
 
-    // console.log(`&role_like=${filterValue}`)
+    
 
-    // await fetch(`http://localhost:3001/jobs?role_like=${filterValue}`, {
-    //   headers: {
-    //     "Content-Type": "application/x-www-form-urlencoded",
-    //     Accept: "application/json",
-    //   },
-    // })
-    //   .then(function (response) {
-    //     return response.json();
-    //   })
-    //   .then(function (jobJson) {
-    //     console.log(jobJson);
-    //     props.setJobs(jobJson);
-    //   });
   };
 
   return (
@@ -60,18 +82,18 @@ function Filter(props) {
           placeholder="Search..."
           onChange={searchItems}
         /> */}
-        <select  
+        <select
           className="form-select"
           placeholder="Search..."
           onChange={searchItems} multiple>
-            
-            <option attr="role" value="FrontEnd">FrontEnd</option>
-            <option attr="role" value="Fullstack">Fullstack</option>
-            <option attr="level" value="Senior">Senior</option>
 
-            <option attr="language" value="Javascript">Javascript</option>
-            <option attr="language" value="HTML">HTML</option>
-            <option attr="tool" value="React">React</option>
+          <option attr="role" value="FrontEnd">FrontEnd</option>
+          <option attr="role" value="Fullstack">Fullstack</option>
+          <option attr="level" value="Senior">Senior</option>
+
+          <option attr="language" value="Javascript">Javascript</option>
+          <option attr="language" value="HTML">HTML</option>
+          <option attr="tool" value="React">React</option>
 
 
 
