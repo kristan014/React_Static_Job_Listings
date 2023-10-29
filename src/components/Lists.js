@@ -4,6 +4,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Stack from "react-bootstrap/Stack";
 import Filter from "./Filter";
+import Pagination from "./Pagination";
 
 const Lists = () => {
   const [jobs, setJobs] = useState([]);
@@ -66,6 +67,8 @@ const Lists = () => {
               </Col>
             </Row>
           ))}
+
+          <Pagination />
         </Stack>
       </Container>
     </div>

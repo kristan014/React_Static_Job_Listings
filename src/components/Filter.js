@@ -1,59 +1,44 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import api from "../api/api";
 
 function Filter(props) {
 
-
-
   const [isFiltered, setIsFiltered] = useState(false);
   const [urlParams, setUrlParams] = useState('');
 
-  const [roleParams, setRoleParams] = useState([]);
-  const [levelParams, setLevelParams] = useState([]);
-  const [languageParams, setLanguageParams] = useState([]);
-  const [toolParams, setToolParams] = useState([]);
+  useEffect(() => {
+    api.getData(props.setJobs)
+}, [])
+  // isFiltered ? api.getData(props.setJobs,urlParams) : api.getData(props.setJobs)
 
 
-  isFiltered ? api.getData(props.setJobs) : api.getData(props.setJobs)
+  const searchItems = (e) => {
 
-
-
-  const searchItems = async (e) => {
-    // console.log(e.target.selectedOptions)
-    // let filterValue;
-
-    setRoleParams([])
-    setLevelParams([])
-    setLanguageParams([])
-    setToolParams([])
-
-
-
+    let string = ''
     Array.from(e.target.selectedOptions, option => {
       let attr = option.getAttribute('attr')
 
-      let string = ''
 
       switch (attr) {
         case 'role':
-          setRoleParams(roleParams => [...roleParams, option.value])
+          string += `&role=${option.value}` 
           setIsFiltered(true)
           break;
 
         case 'level':
-          setLevelParams(levelParams => [...levelParams, option.value])
+          string += `&level=${option.value}`
           setIsFiltered(true)
           break;
 
-        case 'language':
-          setLanguageParams(languageParams => [...languageParams, option.value])
+        case 'languages':
+          string += `&languages=${option.value}`
           setIsFiltered(true)
           break;
 
-        case 'tool':
-          setToolParams(toolParams => [...toolParams, option.value])
+        case 'tools':
+          string += `&tools=${option.value}`
           setIsFiltered(true)
           break;
           
@@ -62,26 +47,17 @@ function Filter(props) {
           break;
       }
 
-          
+
     });
+    setUrlParams(string)
 
-    Array.from(roleParams, role =>{
-      console.log(role)
-    })
-
-    
-
+    api.getData(props.setJobs,urlParams) 
   };
 
   return (
     <Row className="justify-content-center">
       <Col xs="10" lg="10" className="bg-warning">
-        {/* <input
-          type="search"
-          className="form-control"
-          placeholder="Search..."
-          onChange={searchItems}
-        /> */}
+
         <select
           className="form-select"
           placeholder="Search..."
@@ -91,12 +67,9 @@ function Filter(props) {
           <option attr="role" value="Fullstack">Fullstack</option>
           <option attr="level" value="Senior">Senior</option>
 
-          <option attr="language" value="Javascript">Javascript</option>
-          <option attr="language" value="HTML">HTML</option>
-          <option attr="tool" value="React">React</option>
-
-
-
+          <option attr="languages" value="JavaScript">Javascript</option>
+          <option attr="languages" value="HTML">HTML</option>
+          <option attr="tools" value="React">React</option>
 
         </select>
       </Col>
