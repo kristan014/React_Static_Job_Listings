@@ -7,6 +7,7 @@ function Filter(props) {
   const searchItems = (e) => {
     let string = "";
 
+    // concat to string the value base on the data attribute of the selected option
     Array.from(e.target.selectedOptions, option => {
       let attr = option.getAttribute("attr");
 
@@ -27,13 +28,18 @@ function Filter(props) {
           return null
       }
     });
+
+    // set the string params
     props.setUrlParams(string);
+
+    // execute function updateState
     props.updateState();
   };
 
   return (
     <Row className="justify-content-center">
       <Col xs="10" lg="10" className="bg-warning">
+        {/* temporary */}
         <select
           className="form-select"
           placeholder="Search..."

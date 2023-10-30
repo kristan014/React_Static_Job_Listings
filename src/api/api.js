@@ -18,14 +18,12 @@ const api = {
       })
       .then(function (jobJson) {
         // set the result to the setter state
-        console.log(jobJson)
         setJobs(jobJson);
       });
   },
 
   // count the number of rows of result
   countPages: async (setTotalPage, params) => {
-    console.log(params)
     let url = params ? `http://localhost:3001/jobs?1=1${params}` : `http://localhost:3001/jobs`
 
     await fetch(url, {
@@ -39,8 +37,6 @@ const api = {
       })
       .then(function (jobJson) {
         // console.log(jobJson)
-        console.log(Math.ceil(jobJson.length / 3))
-
         setTotalPage(Math.ceil(jobJson.length / 3));
       });
   },

@@ -8,10 +8,15 @@ import Pagination from "./Pagination";
 import api from "../api/api";
 
 const Lists = () => {
+  // job lists
   const [jobs, setJobs] = useState([]);
+  // total number of pages
   const [totalPage, setTotalPage] = useState(1);
+  // total rows per page
   const [rowsPerpage] = useState(3);
+  // current page number
   const [currentPage, setCurrentPage] = useState(1);
+  // url api parameters
   const [urlParams, setUrlParams] = useState("");
 
   const updateState = () => {
@@ -68,6 +73,7 @@ const Lists = () => {
                     <Col className="mt-3" lg="6">
                       <span className="d-inline-block me-3">{job.role}</span>
                       <span className="d-inline-block me-3">{job.level}</span>
+                      {/* loop the languages array */}
                       {job.languages.map((language, index) => {
                         return (
                           <span className="d-inline-block me-3" key={index}>
@@ -75,7 +81,7 @@ const Lists = () => {
                           </span>
                         );
                       })}
-
+                      {/* loop the tools array */}
                       {job.tools.map((tool, index) => {
                         return (
                           <span className="d-inline-block me-3" key={index}>
