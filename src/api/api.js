@@ -1,47 +1,49 @@
-
-
 const api = {
+  // get all the jobs
+  getData: async (setJobs, params, currentPage, rowsPerpage) => {
+    // console.log(currentPage);
 
-     getData : async (setJobs,params) => {
-      let url = params ? `http://localhost:3001/jobs?_limit=5${params}` : `http://localhost:3001/jobs?_page=2&_limit=3` 
+    let url = params
+      ? `http://localhost:3001/jobs?_page=${currentPage}&_limit=${rowsPerpage}${params}`
+      : `http://localhost:3001/jobs?_page=${currentPage}&_limit=${rowsPerpage}`;
 
-      console.log(url)
-        await fetch(url, {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            Accept: "application/json",
-          },
-        })
-          .then(function (response) {
-            console.log(response.headers)
-            return response.json();
-          })
-          .then(function (jobJson) {
-            // console.log(jobJson);
-            setJobs(jobJson);
-          });
+    await fetch(url, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Accept: "application/json",
       },
+    })
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (jobJson) {
+        // set the result to the setter state
+        console.log(jobJson)
+        setJobs(jobJson);
+      });
+  },
 
-      countRows : async (setTotalRows) => {
-        let url = `http://localhost:3001/jobs` 
-  
-        console.log(url)
-          await fetch(url, {
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-              Accept: "application/json",
-            },
-          })
-            .then(function (response) {
-              console.log(response)
-              return response.json();
-            })
-            .then(function (jobJson) {
-              //  console.log(jobJson);
-               setTotalRows(jobJson.length)
-            });
-        }
+  // count the number of rows of result
+  countPages: async (setTotalPage, params) => {
+    console.log(params)
+    let url = params ? `http://localhost:3001/jobs?1=1${params}` : `http://localhost:3001/jobs`
 
-}
+    await fetch(url, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Accept: "application/json",
+      },
+    })
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (jobJson) {
+        // console.log(jobJson)
+        console.log(Math.ceil(jobJson.length / 3))
 
-export default api
+        setTotalPage(Math.ceil(jobJson.length / 3));
+      });
+  },
+};
+
+export default api;

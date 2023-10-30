@@ -1,20 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Stack from "react-bootstrap/Stack";
 import Filter from "./Filter";
 import Pagination from "./Pagination";
+import api from "../api/api";
 
 const Lists = () => {
   const [jobs, setJobs] = useState([]);
+  const [totalPage, setTotalPage] = useState(1);
+  const [rowsPerpage] = useState(3);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [urlParams, setUrlParams] = useState("");
+
+  const updateState = () => {
+    api.countPages(setTotalPage,urlParams);
+    api.getData(setJobs, urlParams, currentPage, rowsPerpage);
+  };
+
+  useEffect(() => {
+    updateState();
+  }, [totalPage, currentPage,urlParams]);
 
   return (
     <div>
       <Container>
         <Stack gap={4}>
-          <Filter setJobs={setJobs} />
+          {/* call the filter component */}
+          <Filter
+            setJobs={setJobs}
+            currentPage={currentPage}
+            totalPage={totalPage}
+            setUrlParams={setUrlParams}
+            updateState={updateState}
+          />
 
+          {/* loop to display all the jobs */}
           {jobs.map((job, index) => (
             <Row
               className="justify-content-center"
@@ -68,7 +90,14 @@ const Lists = () => {
             </Row>
           ))}
 
-          <Pagination />
+          {/* call the pagination component */}
+          <Pagination
+            setTotalPage={setTotalPage}
+            totalPage={totalPage}
+            setCurrentPage={setCurrentPage}
+            currentPage={currentPage}
+            updateState={updateState}
+          />
         </Stack>
       </Container>
     </div>
