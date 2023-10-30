@@ -19,10 +19,22 @@ const Lists = () => {
   // url api parameters
   const [urlParams, setUrlParams] = useState("");
 
+  const [filters, setFilters] = useState([]);
+
+
   const updateState = () => {
     api.countPages(setTotalPage,urlParams);
     api.getData(setJobs, urlParams, currentPage, rowsPerpage);
   };
+
+  const selectOptions = (e) =>{
+    let categoryAttr = e.target.getAttribute("category-attr");
+    let valueAttr = e.target.getAttribute("value-attr");
+
+
+    console.log(categoryAttr,valueAttr)
+    // setFilters()
+  }
 
   useEffect(() => {
     updateState();
@@ -46,10 +58,6 @@ const Lists = () => {
             <Row
               className="justify-content-center"
               key={index}
-              data-role={job.role}
-              data-level={job.level}
-              data-languages={job.languages}
-              data-tools={job.tools}
             >
               <Col xs="10" lg="10" className="bg-warning">
                 <div className="card-container">
@@ -71,12 +79,12 @@ const Lists = () => {
                     </Col>
 
                     <Col className="mt-3" lg="6">
-                      <span className="d-inline-block me-3">{job.role}</span>
-                      <span className="d-inline-block me-3">{job.level}</span>
+                      <span className="d-inline-block me-3" category-attr="role"  value-attr={job.role} onClick={(e)=> {selectOptions(e)}}>{job.role}</span>
+                      <span className="d-inline-block me-3" category-attr="level" value-attr={job.level} onClick={(e)=> {selectOptions(e)}}>{job.level}</span>
                       {/* loop the languages array */}
                       {job.languages.map((language, index) => {
                         return (
-                          <span className="d-inline-block me-3" key={index}>
+                          <span className="d-inline-block me-3" key={index} category-attr="language" value-attr={language} onClick={(e)=> {selectOptions(e)}}>
                             {language}
                           </span>
                         );
@@ -84,7 +92,7 @@ const Lists = () => {
                       {/* loop the tools array */}
                       {job.tools.map((tool, index) => {
                         return (
-                          <span className="d-inline-block me-3" key={index}>
+                          <span className="d-inline-block me-3" key={index} category-attr="tool" value-attr={tool} onClick={(e)=> {selectOptions(e)}}>
                             {tool}
                           </span>
                         );
