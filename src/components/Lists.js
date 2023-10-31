@@ -10,35 +10,45 @@ import api from "../api/api";
 const Lists = () => {
   // job lists
   const [jobs, setJobs] = useState([]);
+
   // total number of pages
   const [totalPage, setTotalPage] = useState(1);
+
   // total rows per page
   const [rowsPerpage] = useState(3);
+
   // current page number
   const [currentPage, setCurrentPage] = useState(1);
+
   // url api parameters
   const [urlParams, setUrlParams] = useState("");
 
+  // here will stored the elements that will be used to filter the jobs
   const [filters, setFilters] = useState([]);
 
 
+  // update the state by requesting new request from the api
   const updateState = () => {
-    api.countPages(setTotalPage,urlParams);
+    console.log(urlParams)
+    api.countPages(setTotalPage, urlParams);
     api.getData(setJobs, urlParams, currentPage, rowsPerpage);
   };
 
-  const selectOptions = (e) =>{
+  // get the attribute of element that have been clicked
+  const selectOptions = (e) => {
     let categoryAttr = e.target.getAttribute("category-attr");
     let valueAttr = e.target.getAttribute("value-attr");
 
-
-    console.log(categoryAttr,valueAttr)
-    // setFilters()
+    setFilters(filters => [...filters,
+    {
+      [categoryAttr]: valueAttr
+    }
+    ])
   }
 
   useEffect(() => {
     updateState();
-  }, [totalPage, currentPage,urlParams]);
+  }, [totalPage, currentPage, urlParams]);
 
   return (
     <div>
@@ -46,11 +56,9 @@ const Lists = () => {
         <Stack gap={4}>
           {/* call the filter component */}
           <Filter
-            setJobs={setJobs}
-            currentPage={currentPage}
-            totalPage={totalPage}
             setUrlParams={setUrlParams}
             updateState={updateState}
+            filters={filters}
           />
 
           {/* loop to display all the jobs */}
@@ -79,24 +87,46 @@ const Lists = () => {
                     </Col>
 
                     <Col className="mt-3" lg="6">
-                      <span className="d-inline-block me-3" category-attr="role"  value-attr={job.role} onClick={(e)=> {selectOptions(e)}}>{job.role}</span>
-                      <span className="d-inline-block me-3" category-attr="level" value-attr={job.level} onClick={(e)=> {selectOptions(e)}}>{job.level}</span>
+
+                      <span className="d-inline-block me-3"
+                        category-attr="role"
+                        value-attr={job.role}
+                        onClick={(e) => { selectOptions(e) }}>
+                        {job.role}
+                      </span>
+
+                      <span className="d-inline-block me-3"
+                        category-attr="level"
+                        value-attr={job.level}
+                        onClick={(e) => { selectOptions(e) }}>
+                        {job.level}
+                      </span>
+
                       {/* loop the languages array */}
                       {job.languages.map((language, index) => {
                         return (
-                          <span className="d-inline-block me-3" key={index} category-attr="language" value-attr={language} onClick={(e)=> {selectOptions(e)}}>
+                          <span className="d-inline-block me-3"
+                            key={index}
+                            category-attr="languages"
+                            value-attr={language}
+                            onClick={(e) => { selectOptions(e) }}>
                             {language}
                           </span>
                         );
                       })}
+                      
                       {/* loop the tools array */}
                       {job.tools.map((tool, index) => {
                         return (
-                          <span className="d-inline-block me-3" key={index} category-attr="tool" value-attr={tool} onClick={(e)=> {selectOptions(e)}}>
+                          <span className="d-inline-block me-3"
+                            key={index} category-attr="tools"
+                            value-attr={tool}
+                            onClick={(e) => { selectOptions(e) }}>
                             {tool}
                           </span>
                         );
                       })}
+
                     </Col>
                   </Row>
                 </div>
@@ -106,7 +136,6 @@ const Lists = () => {
 
           {/* call the pagination component */}
           <Pagination
-            setTotalPage={setTotalPage}
             totalPage={totalPage}
             setCurrentPage={setCurrentPage}
             currentPage={currentPage}
