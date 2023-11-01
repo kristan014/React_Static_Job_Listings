@@ -26,10 +26,8 @@ const Lists = () => {
   // here will stored the elements that will be used to filter the jobs
   const [filters, setFilters] = useState([]);
 
-
   // update the state by requesting new request from the api
   const updateState = () => {
-    console.log(urlParams)
     api.countPages(setTotalPage, urlParams);
     api.getData(setJobs, urlParams, currentPage, rowsPerpage);
   };
@@ -39,12 +37,19 @@ const Lists = () => {
     let categoryAttr = e.target.getAttribute("category-attr");
     let valueAttr = e.target.getAttribute("value-attr");
 
-    setFilters(filters => [...filters,
-    {
-      [categoryAttr]: valueAttr
-    }
-    ])
-  }
+    // check if value is already in state array
+    const findValue = filters.map((e) => e[categoryAttr]).indexOf(valueAttr);
+
+    // if value is already existied, it will not be pushed to tha state array,
+    if (findValue !== -1) return;
+
+    setFilters((filters) => [
+      ...filters,
+      {
+        [categoryAttr]: valueAttr,
+      },
+    ]);
+  };
 
   useEffect(() => {
     updateState();
@@ -59,14 +64,12 @@ const Lists = () => {
             setUrlParams={setUrlParams}
             updateState={updateState}
             filters={filters}
+            setFilters={setFilters}
           />
 
           {/* loop to display all the jobs */}
           {jobs.map((job, index) => (
-            <Row
-              className="justify-content-center"
-              key={index}
-            >
+            <Row className="justify-content-center" key={index}>
               <Col xs="10" lg="10" className="bg-warning">
                 <div className="card-container">
                   <Row className="align-items-center">
@@ -87,46 +90,61 @@ const Lists = () => {
                     </Col>
 
                     <Col className="mt-3" lg="6">
-
-                      <span className="d-inline-block me-3"
+                      <span
+                        className="d-inline-block me-3"
                         category-attr="role"
                         value-attr={job.role}
-                        onClick={(e) => { selectOptions(e) }}>
+                        onClick={(e) => {
+                          selectOptions(e);
+                        }}
+                      >
                         {job.role}
                       </span>
 
-                      <span className="d-inline-block me-3"
+                      <span
+                        className="d-inline-block me-3"
                         category-attr="level"
                         value-attr={job.level}
-                        onClick={(e) => { selectOptions(e) }}>
+                        onClick={(e) => {
+                          selectOptions(e);
+                        }}
+                      >
                         {job.level}
                       </span>
 
                       {/* loop the languages array */}
                       {job.languages.map((language, index) => {
                         return (
-                          <span className="d-inline-block me-3"
+                          <span
+                            className="d-inline-block me-3"
                             key={index}
                             category-attr="languages"
                             value-attr={language}
-                            onClick={(e) => { selectOptions(e) }}>
+                            onClick={(e) => {
+                              selectOptions(e);
+                            }}
+                          >
                             {language}
                           </span>
                         );
                       })}
-                      
+
                       {/* loop the tools array */}
                       {job.tools.map((tool, index) => {
                         return (
-                          <span className="d-inline-block me-3"
-                            key={index} category-attr="tools"
+                          <span
+                            className="d-inline-block me-3"
+                            key={index}
+                            category-attr="tools"
                             value-attr={tool}
-                            onClick={(e) => { selectOptions(e) }}>
+                            onClick={(e) => {
+                              selectOptions(e);
+                            }}
+                          >
                             {tool}
                           </span>
                         );
                       })}
-
                     </Col>
                   </Row>
                 </div>

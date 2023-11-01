@@ -4,33 +4,32 @@ import Col from "react-bootstrap/Col";
 
 function Filter(props) {
 
+  // execute every time the state changes
   useEffect(() => {
     searchItems();
   }, [props.filters]);
 
   // remove a specific filter
-  const removeFilter = (key,value) => {
-    console.log(props.filters)
-
-    props.filters.filter(function(filter,index) { 
-      console.log(value)
-      console.log(value !== filter[key])
-
-      return value !== filter[key]
-  })
-
-  console.log(props.filters)
-  }
+  const removeFilter = (filter) => {
+    props.setFilters(
+      props.filters.filter((filter1) => {
+        return filter !== filter1;
+      })
+    );
+  };
 
   // build a string that will be used as parameter in api request
   const searchItems = (e) => {
+  
+
     let string = "";
 
     // concat to string the value base on the data attribute of the selected option
-    props.filters.map((filter, index) => {
+    props.filters.map((filter, index) => { 
       let key = Object.keys(filter)[0];
-      return (key === 'languages' || key === 'tools') ? string += `&${key}_like=${filter[key]}` 
-                                                      : string += `&${key}=${filter[key]}`;
+      return key === "languages" || key === "tools"
+        ? (string += `&${key}_like=${filter[key]}`)
+        : (string += `&${key}=${filter[key]}`);
     });
 
     // set the string params
@@ -46,10 +45,20 @@ function Filter(props) {
         <div className="bg-warning">
           {props.filters.map((filter, index) => {
             let key = Object.keys(filter)[0];
-            return <p key={index}>{filter[key]} <span onClick={() => { removeFilter(key,filter[key]) }}>X</span></p>
+            return (
+              <p key={index}>
+                {filter[key]}{" "}
+                <span
+                  onClick={() => {
+                    removeFilter(filter);
+                  }}
+                >
+                  X
+                </span>
+              </p>
+            );
           })}
         </div>
-     
       </Col>
     </Row>
   );
