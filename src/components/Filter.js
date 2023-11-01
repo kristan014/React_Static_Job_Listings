@@ -20,8 +20,6 @@ function Filter(props) {
 
   // build a string that will be used as parameter in api request
   const searchItems = (e) => {
-  
-
     let string = "";
 
     // concat to string the value base on the data attribute of the selected option

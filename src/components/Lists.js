@@ -51,6 +51,7 @@ const Lists = () => {
     ]);
   };
 
+  // execute every time the state changes
   useEffect(() => {
     updateState();
   }, [totalPage, currentPage, urlParams]);
